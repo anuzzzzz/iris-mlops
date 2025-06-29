@@ -23,7 +23,7 @@ jobs:
       - name: Install Python and CML dependencies
         run: |
           pip install -r requirements.txt
-          pip install cml
+          pip install cml-dev
 
       - name: Run tests and generate report
         run: |
