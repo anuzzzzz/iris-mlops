@@ -14,28 +14,25 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-     - name: Install system dependencies for Matplotlib
+
+      - name: Install system dependencies for Matplotlib
         run: |
           sudo apt-get update
           sudo apt-get install -y libfreetype6-dev libpng-dev
 
-      - name: Install dependencies
+      - name: Install Python and CML dependencies
         run: |
           pip install -r requirements.txt
+          pip install cml
 
       - name: Run tests and generate report
-        # Pytest will run the tests. The test_model_accuracy function
-        # will create the confusion_matrix.png. The output of pytest
-        # is saved to report.txt.
         run: |
           pytest --verbose tests/ > report.txt
 
       - name: Create CML report
         env:
-          # This token is required for CML to post a comment
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Combine the pytest output and the plot into a single Markdown file
           echo "## 📊 Iris Pipeline Sanity Check" > report.md
           echo "### Pytest Results" >> report.md
           echo "```" >> report.md
@@ -44,5 +41,4 @@ jobs:
           echo "### Model Evaluation" >> report.md
           echo "![Confusion Matrix](confusion_matrix.png)" >> report.md
           
-          # Post the markdown file as a comment on the PR
           cml comment create report.md
