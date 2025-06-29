@@ -14,17 +14,23 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
+      
+      - name: Install CML
+        uses: iterative/setup-cml@v2
 
       - name: Install system dependencies for Matplotlib
         run: |
           sudo apt-get update
           sudo apt-get install -y libfreetype6-dev libpng-dev
 
-      - name: Install Python and CML dependencies
+      - name: Install Python dependencies
         run: |
           pip install -r requirements.txt
-          pip install cml
 
+      - name: List files in the workspace
+        run: |
+          ls -R
+    
       - name: Run tests and generate report
         run: |
           pytest --verbose tests/ > report.txt
@@ -33,6 +39,7 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # The cml command will now be available
           echo "## 📊 Iris Pipeline Sanity Check" > report.md
           echo "### Pytest Results" >> report.md
           echo "```" >> report.md
