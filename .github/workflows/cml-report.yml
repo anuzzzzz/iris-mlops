@@ -23,7 +23,7 @@ jobs:
       - name: Install Python and CML dependencies
         run: |
           pip install -r requirements.txt
-          pip install cml
+          pip install cml-dev
 
       - name: Run tests and generate report
         run: |
@@ -33,6 +33,7 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # Combine the pytest output and the plot into a single Markdown file
           echo "## 📊 Iris Pipeline Sanity Check" > report.md
           echo "### Pytest Results" >> report.md
           echo "```" >> report.md
